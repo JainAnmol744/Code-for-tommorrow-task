@@ -1,49 +1,20 @@
-import axios from 'axios'
-import React, { useState, useEffect } from 'react'
 
+import React, { useContext } from 'react'
+import UseContext from './UseContext'
 
 const Item = () => {
 
+ const {List,data,Loading}=useContext(UseContext);
+ const context=useContext(UseContext);
+ const handleclick=(page)=>{
+    context.click(page)
     
-    const [List, SetList] = useState([]);
-    const [Loading, setLoading] = useState(true);
-    const [currentpage, setcurrentpage]= useState(1);
-
-useEffect(()=>{
-
-
-    const fetch = ()=>{
-        setTimeout(async()=>{
-
-            const data = await axios.get('https://jsonplaceholder.typicode.com/posts')
-            if(data){
     
-                SetList(data.data);
-                setLoading(false);
-            }
+}
+const handledelete=(key)=>{
+    context.delete(key)
+}
 
-        }, 5000)
-      
-    }
-
-    fetch();
-},[])
-
-
-    const handledelete=(key)=>{
-        const newList = [...List]
-        newList.splice(key,1);
-        SetList(newList);
-    }
-
-
-    const handleclick = (page)=>{
-        setcurrentpage(page);
-    }
-
-    const startindex = (currentpage -1) * 6;
-    const endindex = startindex + 6;
-    const data = List.slice(startindex, endindex)
 
   return (
     <>
@@ -74,7 +45,7 @@ useEffect(()=>{
             {
                 Array.from({length: List.length/6},(_,index)=> index+1).map(
                     (page)=>(
-                        <button key={page} onClick={()=>handleclick(page)} disabled={currentpage===page}>{page}</button>
+                        <button key={page} onClick={()=>handleclick(page)} >{page}</button>
                     )
                 )
             }
